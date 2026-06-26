@@ -53,8 +53,8 @@ Building reliable, high-performance Java backend systems in the Healthcare/Medic
 ## 📫 Connect
 
 [![Email](https://img.shields.io/badge/hrajes57@gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:hrajes57@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_LINKEDIN)
-[![LeetCode](https://img.shields.io/badge/LeetCode-FFA116?style=flat&logo=leetcode&logoColor=black)](https://leetcode.com/YOUR_HANDLE)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rajesh1606/)
+[![LeetCode](https://img.shields.io/badge/LeetCode-FFA116?style=flat&logo=leetcode&logoColor=black)](https://leetcode.com/u/hrajes57/)
 
 ---
 ⭐ Open to Senior Java Backend / Lead Engineer roles · Chennai or Remote
