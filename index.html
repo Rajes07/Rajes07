@@ -1,1365 +1,1004 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Happy Birthday, My Love</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Fredoka+One:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif'],
-            fancy: ['Fredoka One', 'cursive'],
-            script: ['Dancing Script', 'cursive'],
-          },
-          boxShadow: {
-            soft: '0 24px 80px rgba(244, 182, 214, 0.24)',
-            glow: '0 0 30px rgba(255, 205, 220, 0.35)',
-          },
-        }
-      }
-    }
-  </script>
-  <style>
-    :root {
-      color-scheme: light;
-    }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, #ffeaf1 0%, #f6f0ff 30%, #f8f1ff 100%);
-    }
-    .page-shell {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 0;
-    }
-    .app-card {
-      width: min(430px, calc(100vw - 1.5rem));
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(255, 241, 247, 0.88);
-      border-radius: 40px;
-      box-shadow: 0 30px 90px rgba(234, 168, 199, 0.22);
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(18px);
-    }
-    .soft-glow {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at top left, rgba(255, 187, 212, 0.22), transparent 32%),
-                  radial-gradient(circle at bottom right, rgba(225, 199, 255, 0.24), transparent 25%);
-      z-index: 0;
-    }
-    .slide {
-      min-height: 520px;
-      padding: 1.5rem;
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      z-index: 1;
-    }
-    .slide.active {
-      display: flex;
-    }
-    .heart-float {
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: radial-gradient(circle at 50% 40%, #ff91c6 0%, #ff5aa5 55%);
-      transform: rotate(-45deg);
-      border-radius: 18px 18px 0 0;
-      animation: floatUp 6s infinite ease-in-out;
-      opacity: 0.9;
-    }
-    .heart-float::after,
-    .heart-float::before {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: radial-gradient(circle at 50% 40%, #ff91c6 0%, #ff5aa5 55%);
-      border-radius: 50%;
-      top: -12px;
-      left: 0;
-    }
-    .heart-float::before {
-      left: 12px;
-    }
-    .heart1 { left: 14%; bottom: 16%; animation-duration: 7s; animation-delay: 0.2s; }
-    .heart2 { left: 68%; bottom: 10%; animation-duration: 5.6s; animation-delay: 1.4s; width: 20px; height: 20px; }
-    .heart3 { left: 38%; bottom: 4%; animation-duration: 6.8s; animation-delay: 0.8s; }
-    .heart4 { left: 80%; bottom: 24%; animation-duration: 8.2s; animation-delay: 0.5s; width: 22px; height: 22px; }
-    .heart5 { left: 12%; bottom: 24%; animation-duration: 7.5s; animation-delay: 2s; width: 18px; height: 18px; }
-    @keyframes floatUp {
-      0% { transform: translateY(0) rotate(-45deg) scale(0.9); opacity: 0.9; }
-      50% { transform: translateY(-22px) rotate(-45deg) scale(1.05); opacity: 1; }
-      100% { transform: translateY(-10px) rotate(-45deg) scale(0.95); opacity: 0.85; }
-    }
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 16px;
-      opacity: 0.85;
-      border-radius: 4px;
-      animation: confettiFall linear infinite;
-    }
-    @keyframes confettiFall {
-      0% { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
-      100% { transform: translateY(600px) rotate(360deg); opacity: 0.2; }
-    }
-    .decor-circle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.12;
-      background: rgba(255, 196, 242, 0.88);
-      filter: blur(2px);
-    }
-    .decor-square {
-      position: absolute;
-      width: 44px;
-      height: 44px;
-      border-radius: 18px;
-      background: rgba(247, 227, 255, 0.9);
-      opacity: 0.16;
-      filter: blur(0.5px);
-    }
-    .slide-title {
-      font-size: 1.2rem;
-      letter-spacing: 0.08em;
-    }
-    .hero-badge {
-      width: 72px;
-      height: 72px;
-      border-radius: 28px;
-      background: linear-gradient(135deg, #ffd5e4 0%, #ffeccf 100%);
-      display: grid;
-      place-items: center;
-      box-shadow: 0 18px 36px rgba(252, 192, 221, 0.28);
-    }
-    .hero-badge svg {
-      width: 44px;
-      height: 44px;
-    }
-    .slide-feedback {
-      color: #c1357d;
-    }
-    .card-illustration {
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255, 232, 245, 0.92) 100%);
-      border: 1px solid rgba(255, 208, 225, 0.9);
-      padding: 1.25rem;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.9), 0 22px 50px rgba(250, 210, 235, 0.18);
-    }
-    .pill-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 225, 236, 0.7);
-      border-radius: 999px;
-      padding: 0.5rem 0.85rem;
-      color: #b94a81;
-      font-size: 0.85rem;
-    }
-    .button-soft {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .button-soft:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 36px rgba(245, 142, 190, 0.24);
-    }
-    .slide-window {
-      min-height: 340px;
-    }
-    .pulse-heart {
-      animation: heartbeat 1.8s infinite ease-in-out;
-    }
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      25% { transform: scale(1.06); }
-      50% { transform: scale(0.98); }
-      75% { transform: scale(1.03); }
-    }
-    .btn-invisible {
-      color: #b54a95;
-      background: rgba(255,255,255,0.82);
-    }
-    .slide-1-bg {
-      background: radial-gradient(circle at top right, #8a41a0, #46134a 35%, #190329 100%);
-      color: #f4e6ff;
-    }
-    .slide-1-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 16% 12%, rgba(255, 115, 200, 0.25), transparent 16%),
-                  radial-gradient(circle at 78% 22%, rgba(255, 192, 240, 0.12), transparent 16%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .slide-1-bg .heart-float { background: radial-gradient(circle at 50% 40%, #ff91c6 0%, #ff5aa5 65%); }
-    .slide-1-bg h1 { font-family: 'Fredoka One', cursive; letter-spacing: 0.06em; }
-    .hourglass {
-      width: 140px;
-      height: 220px;
-      margin: 0 auto;
-      position: relative;
-      transform-style: preserve-3d;
-      animation: spinFlip 8s infinite ease-in-out;
-    }
-    .hourglass .glass {
-      width: 100%;
-      height: 100%;
-      border-radius: 50px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08));
-      border: 2px solid rgba(255,255,255,0.6);
-      box-shadow: inset 0 0 25px rgba(255,255,255,0.25);
-      position: relative;
-      overflow: hidden;
-    }
-    .hourglass .sand {
-      position: absolute;
-      width: 58%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: radial-gradient(circle at 50% 20%, rgba(255, 214, 238, 0.95), #ffb2d6 70%);
-      border-radius: 50%;
-      animation: sandFlow 2.5s infinite ease-in-out;
-    }
-    .hourglass .top-sand { top: 20%; height: 32%; }
-    .hourglass .bottom-sand { bottom: 16%; height: 18%; }
-    @keyframes spinFlip {
-      0%, 100% { transform: rotateX(0deg) rotate(360deg); }
-      50% { transform: rotateX(180deg) rotate(360deg); }
-    }
-    @keyframes sandFlow {
-      0% { height: 34%; }
-      50% { height: 18%; }
-      100% { height: 34%; }
-    }
-    .countdown-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.9rem;
-    }
-    .countdown-item {
-      border-radius: 24px;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.22);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 10px 30px rgba(123, 49, 108, 0.12);
-      text-align: center;
-      color: #fff;
-    }
-    .countdown-item .label {
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.82);
-    }
-    .countdown-item .value {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-top: 0.4rem;
-    }
-    .slide-2-bg {
-      background-image:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.24) 15%, transparent 15%),
-        linear-gradient(225deg, rgba(255, 255, 255, 0.24) 15%, transparent 15%),
-        linear-gradient(135deg, rgba(255, 223, 237, 0.7) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(255, 250, 235, 0.9) 25%, transparent 25%);
-      background-size: 48px 48px, 48px 48px, 120px 120px, 120px 120px;
-      background-position: 0 0, 24px 24px, 0 0, 60px 60px;
-      color: #4a2a45;
-    }
-    .balloon {
-      width: 44px;
-      height: 62px;
-      border-radius: 999px 999px 999px 60px;
-      background: rgba(255, 181, 210, 0.9);
-      position: absolute;
-      box-shadow: inset -6px -8px 0 rgba(255, 255, 255, 0.35);
-    }
-    .balloon::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.72);
-      border-radius: 999px;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: -14px;
-    }
-    .slide-3-bg {
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 14%),
-                  radial-gradient(circle at bottom right, rgba(255,255,255,0.18), transparent 16%),
-                  repeating-linear-gradient(0deg, rgba(255,255,255,0.12), rgba(255,255,255,0.12) 1px, transparent 1px, transparent 18px);
-    }
-    .slide-4-bg {
-      background: linear-gradient(180deg, #ffe8f1 0%, #ffcfde 55%, #ffd6e4 100%);
-      position: relative;
-    }
-    .slide-4-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3), transparent 30%),
-                        radial-gradient(circle at 80% 10%, rgba(255, 215, 236, 0.4), transparent 24%);
-      pointer-events: none;
-    }
-    .slide-4-bg .balloon {
-      background: rgba(255, 203, 219, 0.65);
-    }
-    .confetti-celebration {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 5;
-    }
-    .confetti-dot {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      opacity: 0.9;
-      animation: confettiPop 2.6s ease-in-out infinite;
-    }
-    @keyframes confettiPop {
-      0% { transform: translateY(0) scale(0.9); opacity: 1; }
-      50% { transform: translateY(120px) scale(1.1); opacity: 0.8; }
-      100% { transform: translateY(240px) scale(1); opacity: 0; }
-    }
-    .photo-frame {
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.82);
-      background: rgba(255, 255, 255, 0.82);
-      box-shadow: 0 18px 38px rgba(214, 161, 191, 0.18);
-      min-height: 180px;
-      display: grid;
-      place-items: center;
-    }
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .message-card {
-      border-radius: 28px;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 215, 229, 0.78);
-      box-shadow: 0 12px 26px rgba(220, 148, 195, 0.12);
-      position: relative;
-    }
-    .love-tag {
-      position: absolute;
-      top: 0.9rem;
-      right: 0.9rem;
-      background: rgba(255, 239, 246, 0.95);
-      color: #c9538b;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.25rem 0.65rem;
-      border-radius: 999px;
-      letter-spacing: 0.08em;
-    }
-    .heart-toggle {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 1px solid rgba(223, 98, 154, 0.24);
-      display: grid;
-      place-items: center;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-    .heart-toggle.active {
-      transform: scale(1.1);
-      background: rgba(255, 173, 219, 0.35);
-    }
-    .flip-card {
-      perspective: 1000px;
-      border-radius: 28px;
-      background: transparent;
-      position: relative;
-      height: 140px;
-    }
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-      border-radius: 28px;
-      box-shadow: 0 20px 40px rgba(203, 144, 204, 0.12);
-    }
-    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 28px;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #4d2f4c;
-    }
-    .flip-card-front {
-      background: linear-gradient(180deg, rgba(255, 239, 246, 0.96), rgba(255, 255, 255, 0.92));
-    }
-    .flip-card-back {
-      background: linear-gradient(180deg, rgba(255, 206, 241, 0.95), rgba(255, 245, 250, 0.95));
-      transform: rotateY(180deg);
-      font-weight: 600;
-      padding: 1.2rem;
-      line-height: 1.4;
-    }
-    .cake-plate {
-      position: relative;
-      width: 100%;
-      min-height: 210px;
-      display: grid;
-      place-items: center;
-    }
-    .cake-base {
-      width: 180px;
-      height: 90px;
-      border-radius: 48px 48px 22px 22px;
-      background: #f9e5de;
-      position: absolute;
-      bottom: 56px;
-      transition: background 0.25s ease;
-    }
-    .cake-frosting {
-      width: 192px;
-      height: 40px;
-      position: absolute;
-      bottom: 100px;
-      border-radius: 98px 98px 36px 36px;
-      background: #ffe4ee;
-      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.45);
-      transition: background 0.25s ease;
-    }
-    .cake-drip {
-      position: absolute;
-      width: 198px;
-      height: 34px;
-      bottom: 118px;
-      left: calc(50% - 99px);
-      background: #ffd8e9;
-      border-radius: 50% 50% 38% 38%;
-      overflow: hidden;
-      transition: background 0.3s ease;
-    }
-    .cake-drip::before,
-    .cake-drip::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      width: 24px;
-      height: 24px;
-      background: inherit;
-      border-radius: 50%;
-    }
-    .cake-drip::before { left: 28px; }
-    .cake-drip::after { right: 32px; }
-    .candle-group {
-      position: absolute;
-      bottom: 145px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 8px;
-      min-height: 64px;
-      width: 100%;
-    }
-    .candle {
-      width: 10px;
-      height: 38px;
-      background: linear-gradient(180deg, #fff, #ffe4f4);
-      border-radius: 4px;
-      position: relative;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.08);
-    }
-    .candle::after {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 10px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ffd269;
-      opacity: 0.95;
-    }
-    .flame {
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12px;
-      height: 18px;
-      background: radial-gradient(circle at 50% 25%, #ffee7a 0%, #ffb79b 45%, rgba(255, 80, 172, 0.1) 75%);
-      border-radius: 50% 50% 40% 40%;
-      animation: flameFlicker 0.22s infinite alternate ease-in-out;
-      pointer-events: none;
-    }
-    .smoke {
-      position: absolute;
-      top: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 10px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(190, 190, 190, 0.28);
-      animation: smokeRise 1.8s ease-in-out forwards;
-    }
-    @keyframes flameFlicker {
-      0% { transform: translateX(-50%) scaleY(1); opacity: 0.95; }
-      100% { transform: translateX(-50%) scaleY(1.12); opacity: 1; }
-    }
-    @keyframes smokeRise {
-      0% { transform: translate(-50%, 0) scale(1); opacity: 0.7; }
-      100% { transform: translate(-50%, -32px) scale(1.4); opacity: 0; }
-    }
-    .success-note {
-      color: #8f2a72;
-      font-weight: 700;
-      margin-top: 1rem;
-    }
-    .slide-12-bg {
-      background: #f6f4f2;
-    }
-    .letter-card {
-      background: #6e203f;
-      border-radius: 32px;
-      padding: 1.6rem;
-      color: #fff;
-      position: relative;
-      min-height: 360px;
-      box-shadow: 0 32px 72px rgba(101, 32, 70, 0.16);
-      overflow: hidden;
-      font-family: 'Dancing Script', cursive;
-    }
-    .letter-card::before {
-      content: '';
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      border: 1px dashed rgba(255,255,255,0.24);
-      pointer-events: none;
-      border-radius: 28px;
-    }
-    .letter-lines {
-      position: relative;
-      z-index: 1;
-      line-height: 1.8;
-      font-size: 0.96rem;
-    }
-    .letter-lines p { margin: 0 0 0.95rem; }
-    .final-heart {
-      position: absolute;
-      right: 1.2rem;
-      bottom: 1.2rem;
-      font-size: 2rem;
-      animation: glowPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes glowPulse {
-      0%, 100% { transform: scale(1); text-shadow: 0 0 6px rgba(255, 126, 190, 0.6); }
-      50% { transform: scale(1.08); text-shadow: 0 0 12px rgba(255, 126, 190, 0.95); }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rajesh Kumar Mohan — Senior Java Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #1f6feb;
+    --green: #3fb950;
+    --orange: #d29922;
+    --purple: #a371f7;
+    --teal: #39d353;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(13,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 56px;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 7rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(31,111,235,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 70%, rgba(88,166,255,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1100px;
+    width: 100%;
+    align-items: center;
+  }
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-tag::before {
+    content: ''; display: inline-block;
+    width: 24px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .h1-accent { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 440px;
+    margin-bottom: 2rem;
+  }
+  .hero-badges {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .badge.green { color: var(--green); background: rgba(63,185,80,0.08); border-color: rgba(63,185,80,0.2); }
+  .badge.purple { color: var(--purple); background: rgba(163,113,247,0.08); border-color: rgba(163,113,247,0.2); }
+  .badge.orange { color: var(--orange); background: rgba(210,153,34,0.08); border-color: rgba(210,153,34,0.2); }
+
+  .cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--accent2);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── TERMINAL CARD ── */
+  .terminal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .terminal-bar {
+    background: var(--bg3);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+  .terminal-title { font-size: 11px; color: var(--muted); margin-left: 8px; }
+  .terminal-body { padding: 20px 24px; }
+  .t-line { margin: 4px 0; display: flex; gap: 8px; }
+  .t-prompt { color: var(--green); user-select: none; }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--muted); margin-left: 16px; }
+  .t-key { color: var(--accent); }
+  .t-val { color: var(--purple); }
+  .t-str { color: var(--orange); }
+  .t-comment { color: #484f58; }
+  .t-cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--accent); vertical-align: middle;
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .section-divider {
+    width: 40px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 3rem;
+  }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 2rem; font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 3rem; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; }
+  .about-text p strong { color: var(--text); }
+  .about-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  .about-card-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .info-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .info-icon { width: 32px; height: 32px; border-radius: 6px; background: rgba(88,166,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .info-label { font-size: 11px; color: var(--muted); }
+  .info-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .skill-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .skill-card:hover { border-color: var(--accent2); }
+  .skill-card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .skill-icon { font-size: 20px; }
+  .skill-cat { font-size: 12px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .skill-tag.hot { color: var(--accent); border-color: rgba(88,166,255,0.3); background: rgba(88,166,255,0.06); }
+
+  /* ── EXPERIENCE ── */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .exp-item { position: relative; margin-bottom: 3rem; }
+  .exp-dot {
+    position: absolute; left: -2rem; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%; border: 2px solid var(--accent);
+    background: var(--bg);
+    transform: translateX(-4.5px);
+  }
+  .exp-dot.active { background: var(--accent); }
+  .exp-header { margin-bottom: 0.5rem; }
+  .exp-role { font-size: 1rem; font-weight: 600; color: var(--text); }
+  .exp-meta { font-size: 13px; color: var(--muted); margin-bottom: 0.75rem; }
+  .exp-meta span { color: var(--accent); }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 10px; top: 4px;
+  }
+  .exp-bullets li strong { color: var(--text); }
+
+  /* ── PROJECTS ── */
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex; flex-direction: column;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .project-card:hover::before { opacity: 1; }
+  .project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+  .project-icon { font-size: 22px; }
+  .project-lang {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--orange);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lang-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+  .project-name { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .project-desc { font-size: 13px; color: var(--muted); flex: 1; margin-bottom: 1rem; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .project-tag {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 4px;
+  }
+
+  /* ── GITHUB README ── */
+  .readme-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .readme-topbar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px; color: var(--muted);
+  }
+  .readme-body { padding: 2rem; }
+  .readme-body pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--muted);
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  .readme-body pre .md-h1 { color: var(--text); font-weight: 600; font-size: 16px; }
+  .readme-body pre .md-h2 { color: var(--text); font-weight: 600; }
+  .readme-body pre .md-link { color: var(--accent); }
+  .readme-body pre .md-bold { color: var(--text); font-weight: 600; }
+  .readme-body pre .md-badge { color: var(--green); }
+  .copy-btn {
+    margin-top: 1rem;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 13px; cursor: pointer;
+    transition: all 0.2s; font-family: var(--sans);
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── CONTACT ── */
+  .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .contact-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: block;
+  }
+  .contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .contact-icon { font-size: 28px; margin-bottom: 0.75rem; }
+  .contact-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .contact-value { font-size: 13px; color: var(--accent); font-family: var(--mono); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: var(--mono);
+  }
+
+  /* ── CONTRIB GRAPH ── */
+  .contrib-section { margin-top: 2rem; }
+  .contrib-graph {
+    display: flex; gap: 3px; flex-wrap: nowrap; overflow: hidden;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  .contrib-col { display: flex; flex-direction: column; gap: 3px; }
+  .contrib-cell {
+    width: 11px; height: 11px; border-radius: 2px;
+  }
+  .c0 { background: var(--bg3); }
+  .c1 { background: #0e4429; }
+  .c2 { background: #006d32; }
+  .c3 { background: #26a641; }
+  .c4 { background: #39d353; }
+  .contrib-label {
+    font-family: var(--mono);
+    font-size: 11px; color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; animation: fadeUpDown 2s ease-in-out infinite;
+  }
+  .scroll-arrow { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); }
+  @keyframes fadeUpDown { 0%,100% { opacity:0.4; transform:translateX(-50%) translateY(0); } 50% { opacity:1; transform:translateX(-50%) translateY(6px); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .about-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+
+  /* ── ACTIVE NAV ── */
+  .pill-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(63,185,80,0.1);
+    border: 1px solid rgba(63,185,80,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px; color: var(--green);
+    font-family: var(--mono);
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+</style>
 </head>
 <body>
-  <div class="page-shell">
-    <div class="app-card overflow-hidden">
-      <div class="soft-glow"></div>
-      <div class="relative overflow-hidden">
-        <div class="decor-circle" style="width:120px;height:120px;top:-30px;left:-20px;"></div>
-        <div class="decor-circle" style="width:80px;height:80px;top:110px;right:-30px;background:rgba(255,240,205,0.9);"></div>
-        <div class="decor-square" style="top:180px;left:-6px;"></div>
-        <div class="decor-square" style="bottom:100px;right:10px;background:rgba(238,213,255,0.9);"></div>
-        <div class="heart-float heart1"></div>
-        <div class="heart-float heart2"></div>
-        <div class="heart-float heart3"></div>
-        <div class="heart-float heart4"></div>
-        <div class="heart-float heart5"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">rajesh.kumar.mohan</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#readme">README</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag">Senior Software Engineer</div>
+      <h1>Rajesh<br/><span class="h1-accent">Kumar Mohan</span></h1>
+      <p class="hero-sub">Java Backend Engineer with 5 years building production-grade distributed systems in Healthcare/Medicaid (MMIS). Spring Boot · Kafka · Microservices · AWS.</p>
+      <div class="hero-badges">
+        <span class="badge">Java 8–21</span>
+        <span class="badge">Spring Boot</span>
+        <span class="badge green">Kafka</span>
+        <span class="badge purple">Microservices</span>
+        <span class="badge orange">AWS</span>
+        <span class="badge">Kubernetes</span>
+        <span class="badge green">Docker</span>
       </div>
-
-      <div id="slideContainer" class="slide-window relative">
-        <section class="slide slide-1-bg active" data-slide="1">
-          <div class="relative z-10">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <p class="text-xs uppercase tracking-[0.35em] text-pink-200">Not yet...</p>
-                <h1 class="text-4xl font-bold text-white mt-3" style="font-family:'Fredoka One', cursive;">Not yet...</h1>
-              </div>
-              <div class="hero-badge" style="background: rgba(255,255,255,0.16); box-shadow: 0 16px 28px rgba(255,255,255,0.18);">
-                <div class="hourglass">
-                  <div class="glass">
-                    <div class="sand top-sand"></div>
-                    <div class="sand bottom-sand"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="text-sm leading-7 text-pink-100">Come back at 12:00 AM on <span id="countdownDate" class="font-semibold">[Insert Date]</span></p>
-          </div>
-          <div class="mt-6 grid gap-4">
-            <div class="countdown-grid">
-              <div class="countdown-item"><div class="label">Days</div><div class="value" id="daysValue">00</div></div>
-              <div class="countdown-item"><div class="label">Hours</div><div class="value" id="hoursValue">00</div></div>
-              <div class="countdown-item"><div class="label">Minutes</div><div class="value" id="minutesValue">00</div></div>
-              <div class="countdown-item"><div class="label">Seconds</div><div class="value" id="secondsValue">00</div></div>
-            </div>
-            <div class="rounded-3xl bg-white/10 border border-white/25 p-4 text-center text-sm text-pink-100 shadow-soft">
-              <p id="countdownStatus">Locked until midnight. You are almost there.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="slide slide-2-bg" data-slide="2">
-          <div class="relative z-10">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <p class="slide-title uppercase tracking-[0.22em] text-[#a65d86]">Grand entry</p>
-                <h2 class="text-4xl font-bold text-[#241825]" style="font-family:'Fredoka One', cursive;">Happy Birthday,</h2>
-                <p class="text-5xl mt-2" style="font-family:'Dancing Script', cursive; color:#de4f78;">Beautiful</p>
-              </div>
-            </div>
-            <p class="text-sm text-[#5a3c4f] leading-7">Another year more radiant and incredible than the last. A special surprise just for you ✨</p>
-          </div>
-          <div class="relative mt-6 rounded-3xl bg-white/85 border border-pink-100 p-4 shadow-soft overflow-hidden">
-            <div class="balloon" style="top:10px; left:14%; transform: rotate(-10deg);"></div>
-            <div class="balloon" style="top:20px; right:18%; width: 38px; height: 52px;"></div>
-            <div class="balloon" style="bottom:24px; right:28%; width: 40px; height: 56px;"></div>
-            <div class="photo-frame mt-3" style="min-height:200px;">
-              <img src="images/her_photo1.jpg" alt="Your photo" />
-            </div>
-            <div class="mt-4 rounded-3xl bg-[#fff4f7] p-4 border border-pink-200">
-              <div class="font-medium text-[#7a3e5d]">Cute white kitten/bear rests over hearts</div>
-              <div class="mt-2 text-sm text-[#65435d]">A soft illustration waiting for your favorite photo to feel complete.</div>
-            </div>
-            <button id="startSurpriseBtn" class="mt-6 w-full rounded-full bg-gradient-to-r from-pink-400 to-rose-400 px-5 py-4 text-white font-semibold shadow-glow hover:brightness-105">Start the Surprise ➔</button>
-          </div>
-        </section>
-
-        <section class="slide slide-3-bg" data-slide="3">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#a36b92]">Milestone birthday</p>
-            <h2 class="text-3xl font-semibold text-[#5a2d4f] mt-4">You turned</h2>
-          </div>
-          <div class="mt-6 rounded-3xl bg-white p-5 shadow-soft border border-pink-100">
-            <div class="inline-flex items-center gap-2 rounded-full bg-[#fff1f5] px-4 py-2 text-sm font-semibold text-[#b04d80]">✨ MILESTONE BIRTHDAY ✨</div>
-            <div class="mt-6 text-center">
-              <p class="text-lg text-[#723d63]">You turned</p>
-              <p id="ageValue" class="text-6xl font-bold text-[#c21b3a] leading-none mt-2">25</p>
-              <p class="text-lg text-[#723d63] mt-2">today 🎂</p>
-            </div>
-            <div class="mt-6 rounded-3xl bg-[#fff0f3] p-4 border border-pink-150 text-center">
-              <p class="text-sm text-[#6b3c5a]">You've been shining for <span id="daysCount" class="font-semibold text-[#a90c35]">9,125</span> days</p>
-            </div>
-          </div>
-          <div class="mt-5 text-right">
-            <button class="button-soft inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-400 to-pink-500 px-5 py-3 text-white font-semibold shadow-soft" onclick="nextSlide()">Next ➔</button>
-          </div>
-        </section>
-
-        <section class="slide slide-4-bg" data-slide="4">
-          <div class="relative z-10">
-            <div class="text-center">
-              <p class="slide-title uppercase tracking-[0.22em] text-[#8d436b]">Sweet opener</p>
-              <h2 class="text-3xl font-bold text-[#5d304b] mt-4" style="font-family:'Fredoka One', cursive;">Happiest Birthday, My Love! ❤️</h2>
-            </div>
-            <div class="relative mt-8 mx-auto w-full max-w-xs">
-              <div class="photo-frame rounded-[32px] p-3 bg-white/90" style="min-height:240px;">
-                <img src="images/her_photo2.jpg" alt="Sweet portrait" />
-              </div>
-              <div class="absolute top-4 left-4 text-3xl">🐱</div>
-              <div class="absolute bottom-4 right-5 text-2xl">💕</div>
-            </div>
-          </div>
-          <div class="confetti-celebration" id="slide4Confetti"></div>
-        </section>
-
-        <section class="slide" data-slide="5">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#bf4a8a]">Messages Just for You</p>
-            <p class="mt-2 text-sm text-[#5f3c5b] leading-6">A collection of small reminders of how special you are.</p>
-          </div>
-          <div class="mt-5 grid grid-cols-2 gap-3">
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">My forever favorite</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">You're my world 💖</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">Keep being amazing</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">Purest soul ever</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">Your smile is magic</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">You brighten every day</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">You mean everything</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-            <div class="message-card">
-              <div class="love-tag">LOVE</div>
-              <div class="text-xl font-semibold">Forever my happy place</div>
-              <button class="heart-toggle" aria-label="Toggle love">❤</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="slide" data-slide="6">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c55b97]">12 Reasons Why You're Incredible 🌟</p>
-            <div class="mt-3 inline-flex items-center gap-2 rounded-full bg-[#ffe5f3] px-4 py-2 text-sm font-semibold text-[#7f2f61]">0 / 12 Reasons Revealed 💖</div>
-          </div>
-          <div class="mt-5 grid grid-cols-2 gap-3">
-            <div class="flip-card" data-index="0">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">The way your eyes light up when you're excited</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="1">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">How you make even the smallest moments feel special</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="2">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your laughter that warms every room</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="3">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your gentle courage when you chase dreams</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="4">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">The warmth you bring in every hello</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="5">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your kindness that brightens someone’s day</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="6">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">How you make love feel effortless</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="7">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your thoughtful words that mean so much</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="8">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">The way you care for me without a second thought</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="9">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your curiosity that makes every day brighter</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="10">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">How you make our world feel beautifully together</div>
-              </div>
-            </div>
-            <div class="flip-card" data-index="11">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">Tap to reveal</div>
-                <div class="flip-card-back">Your simple presence that makes everything sweeter</div>
-              </div>
-            </div>
-          </div>
-          <div class="mt-4 flex flex-col gap-3">
-            <button id="revealNextBtn" class="button-soft rounded-full bg-gradient-to-r from-pink-400 to-fuchsia-500 px-4 py-3 text-white text-sm font-semibold">Reveal Next ✨</button>
-            <button id="revealAllBtn" class="button-soft rounded-full bg-gradient-to-r from-yellow-300 to-pink-400 px-4 py-3 text-white text-sm font-semibold">Reveal All 🚀</button>
-          </div>
-        </section>
-
-        <section class="slide" data-slide="7">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c25c96]">Cake Builder</p>
-            <h2 class="text-3xl font-semibold text-[#5b2f56] mt-4">Flavor Selection</h2>
-          </div>
-          <div class="cake-plate mt-6">
-            <div class="cake-base" id="cakeBase"></div>
-            <div class="cake-frosting" id="cakeFrosting"></div>
-            <div class="cake-drip" id="cakeDrip"></div>
-            <div class="candle-group" id="candleGroup"></div>
-          </div>
-          <div class="mt-5 overflow-x-auto pb-1">
-            <div class="inline-flex gap-3">
-              <button class="button-soft rounded-full bg-white/90 px-4 py-3 text-sm font-semibold text-[#5d2952]" disabled>Flavor 🍓</button>
-              <button class="button-soft rounded-full bg-white/80 px-4 py-3 text-sm font-semibold text-[#6d325d]">Layers 🍰</button>
-              <button class="button-soft rounded-full bg-white/80 px-4 py-3 text-sm font-semibold text-[#6d325d]">Frosting 🎨</button>
-              <button class="button-soft rounded-full bg-white/80 px-4 py-3 text-sm font-semibold text-[#6d325d]">Decor ✨</button>
-              <button class="button-soft rounded-full bg-white/80 px-4 py-3 text-sm font-semibold text-[#6d325d]">Candles 🕯️</button>
-            </div>
-          </div>
-          <div class="mt-4 grid grid-cols-2 gap-3">
-            <button class="button-soft rounded-3xl border border-pink-200 bg-rose-100 px-4 py-4 text-sm font-semibold text-[#6d2a4f]" data-flavor="vanilla">Vanilla</button>
-            <button class="button-soft rounded-3xl border border-pink-200 bg-[#7c5a47] px-4 py-4 text-sm font-semibold text-white" data-flavor="chocolate">Chocolate</button>
-            <button class="button-soft rounded-3xl border border-pink-200 bg-pink-200 px-4 py-4 text-sm font-semibold text-[#7c3a5b]" data-flavor="strawberry">Strawberry</button>
-            <button class="button-soft rounded-3xl border border-pink-200 bg-red-400 px-4 py-4 text-sm font-semibold text-white" data-flavor="redvelvet">Red Velvet</button>
-          </div>
-        </section>
-
-        <section class="slide" data-slide="8">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c25c96]">Cake Builder</p>
-            <h2 class="text-3xl font-semibold text-[#5b2f56] mt-4">Frosting & Creams</h2>
-          </div>
-          <div class="cake-plate mt-6">
-            <div class="cake-base" id="cakeBase8"></div>
-            <div class="cake-frosting" id="cakeFrosting8"></div>
-            <div class="cake-drip" id="cakeDrip8"></div>
-            <div class="candle-group" id="candleGroup8"></div>
-          </div>
-          <div class="mt-5 grid grid-cols-5 gap-2">
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#ffd8e8;" data-color="#ffd8e8"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#ffeac7;" data-color="#ffeac7"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#d7c3ff;" data-color="#d7c3ff"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#b8f0ff;" data-color="#b8f0ff"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#ffcee0;" data-color="#ffcee0"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#f8c5ff;" data-color="#f8c5ff"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#ffdfb6;" data-color="#ffdfb6"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#d2ffea;" data-color="#d2ffea"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#ffd5aa;" data-color="#ffd5aa"></button>
-            <button class="rounded-full h-10 w-10 border border-white/70 shadow-sm" style="background:#f7c1f5;" data-color="#f7c1f5"></button>
-          </div>
-          <button id="addDripBtn" class="mt-5 w-full rounded-full bg-gradient-to-r from-fuchsia-400 to-pink-500 px-4 py-3 text-white font-semibold">Add Cream Drip 💧</button>
-        </section>
-
-        <section class="slide" data-slide="9">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c25c96]">Cake Builder</p>
-            <h2 class="text-3xl font-semibold text-[#5b2f56] mt-4">Candle Placement</h2>
-          </div>
-          <div class="cake-plate mt-6">
-            <div class="cake-base" id="cakeBase9"></div>
-            <div class="cake-frosting" id="cakeFrosting9"></div>
-            <div class="cake-drip" id="cakeDrip9"></div>
-            <div class="candle-group" id="candleGroup9"></div>
-          </div>
-          <div class="mt-4 flex items-center justify-between gap-3">
-            <button id="addCandleBtn" class="button-soft flex-1 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 px-4 py-3 text-white font-semibold">Add Candle 🕯️</button>
-            <button id="removeCandlesBtn" class="button-soft flex-1 rounded-full bg-white/90 border border-pink-200 px-4 py-3 text-sm font-semibold text-[#af5c7d]">Remove All</button>
-          </div>
-          <p class="mt-3 text-sm text-[#694062]"><span id="candlesCount">0</span> Candles placed</p>
-        </section>
-
-        <section class="slide" data-slide="10">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c25c96]">Cake Builder</p>
-            <h2 class="text-3xl font-semibold text-[#5b2f56] mt-4">Interactive Wish</h2>
-          </div>
-          <div class="cake-plate mt-6">
-            <div class="cake-base" id="cakeBase10"></div>
-            <div class="cake-frosting" id="cakeFrosting10"></div>
-            <div class="cake-drip" id="cakeDrip10"></div>
-            <div class="candle-group" id="candleGroup10"></div>
-          </div>
-          <button id="lightCandlesBtn" class="mt-5 w-full rounded-full bg-gradient-to-r from-yellow-300 to-orange-400 px-4 py-3 text-[#5e2d4e] font-semibold">Light Candles 🔥</button>
-        </section>
-
-        <section class="slide" data-slide="11">
-          <div>
-            <p class="slide-title uppercase tracking-[0.22em] text-[#c25c96]">Cake Builder</p>
-            <h2 class="text-3xl font-semibold text-[#5b2f56] mt-4">Blow Out Magic</h2>
-          </div>
-          <div class="cake-plate mt-6">
-            <div class="cake-base" id="cakeBase11"></div>
-            <div class="cake-frosting" id="cakeFrosting11"></div>
-            <div class="cake-drip" id="cakeDrip11"></div>
-            <div class="candle-group" id="candleGroup11"></div>
-          </div>
-          <button id="blowOutBtn" class="mt-5 w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-4 py-3 text-white font-semibold">Blow Out Candlesticks 🌬️</button>
-          <p id="finalStatus" class="success-note">Cake baked with love! 💖</p>
-          <div class="confetti-celebration" id="blowConfetti"></div>
-        </section>
-
-        <section class="slide slide-12-bg" data-slide="12">
-          <div>
-            <div class="letter-card mx-4">
-              <div class="letter-lines">
-                <p>My love,</p>
-                <p>I don't know if you realize how much brighter things get just because you're in them. The way you laugh, the little things you do without thinking — they all somehow become my favorite things.</p>
-                <p>I find myself smiling randomly throughout the day, and it's almost always because of you. You've made ordinary moments feel worth remembering.</p>
-                <p>I just wanted you to know that loving you feels like the easiest, most natural thing in the world. You are so deeply appreciated — not just for what you do, but for who you are.</p>
-                <p>Always yours, 💛</p>
-                <p>[Your Name]</p>
-              </div>
-              <div class="final-heart">💗</div>
-            </div>
-          </div>
-        </section>
+      <div class="cta-group">
+        <a href="mailto:hrajes57@gmail.com" class="btn btn-primary">📬 Hire Me</a>
+        <a href="#experience" class="btn btn-ghost">View Experience →</a>
+        <a href="https://github.com/Rajes07" class="btn btn-ghost" target="_blank">GitHub ↗</a>
       </div>
+    </div>
 
-      <div class="px-6 pb-6 pt-2">
-        <div class="flex items-center justify-between mb-4">
-          <button id="prevBtn" class="button-soft inline-flex items-center justify-center gap-2 rounded-3xl border border-pink-200 bg-white/90 px-4 py-3 text-sm font-semibold text-pink-600 transition hover:bg-pink-50 disabled:opacity-40" disabled>
-            ← Back
-          </button>
-          <div id="progressDots" class="flex items-center gap-2"></div>
-          <button id="nextBtn" class="button-soft inline-flex items-center justify-center gap-2 rounded-3xl bg-gradient-to-r from-pink-300 to-purple-300 px-5 py-3 text-sm font-semibold text-white shadow-soft hover:brightness-105">
-            Next →
-          </button>
-        </div>
-        <p id="autoHint" class="text-center text-[0.84rem] text-[#8a3f76]">Slide by slide, gently moving forward with sweet transitions.</p>
+    <!-- Terminal -->
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="terminal-title">~/rajesh — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">cat profile.json</span></div>
+        <div class="t-line"><span class="t-out">{</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-str">"Rajesh Kumar Mohan"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"role"</span>: <span class="t-str">"Senior Software Engineer"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"experience"</span>: <span class="t-val">5</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"domain"</span>: <span class="t-str">"Healthcare / MMIS"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"stack"</span>: [<span class="t-str">"Java"</span>, <span class="t-str">"Spring Boot"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Kafka"</span>, <span class="t-str">"AWS"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Kubernetes"</span>, <span class="t-str">"Docker"</span>],</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"open_to"</span>: <span class="t-str">"Senior / Lead Backend Roles"</span>,</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;<span class="t-key">"available"</span>: <span class="t-val">true</span></span></div>
+        <div class="t-line"><span class="t-out">}</span></div>
+        <div class="t-line" style="margin-top:12px"><span class="t-prompt">❯</span>&nbsp;<span class="t-cursor"></span></div>
       </div>
     </div>
   </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    scroll
+  </div>
+</div>
 
-  <script>
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    const progressDots = document.getElementById('progressDots');
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const startSurpriseBtn = document.getElementById('startSurpriseBtn');
-    const revealNextBtn = document.getElementById('revealNextBtn');
-    const revealAllBtn = document.getElementById('revealAllBtn');
-    const addDripBtn = document.getElementById('addDripBtn');
-    const addCandleBtn = document.getElementById('addCandleBtn');
-    const removeCandlesBtn = document.getElementById('removeCandlesBtn');
-    const lightCandlesBtn = document.getElementById('lightCandlesBtn');
-    const blowOutBtn = document.getElementById('blowOutBtn');
-    const daysValue = document.getElementById('daysValue');
-    const hoursValue = document.getElementById('hoursValue');
-    const minutesValue = document.getElementById('minutesValue');
-    const secondsValue = document.getElementById('secondsValue');
-    const countdownStatus = document.getElementById('countdownStatus');
-    const countdownDateLabel = document.getElementById('countdownDate');
-    const daysCount = document.getElementById('daysCount');
-    const ageValue = document.getElementById('ageValue');
-    const candlesCount = document.getElementById('candlesCount');
-    const finalStatus = document.getElementById('finalStatus');
-    const slide4Confetti = document.getElementById('slide4Confetti');
-    const blowConfetti = document.getElementById('blowConfetti');
+<!-- STATS -->
+<section style="padding-top: 2rem; padding-bottom: 2rem;">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">5+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">40%</div>
+      <div class="stat-label">Overhead Reduced</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">99.9%</div>
+      <div class="stat-label">Uptime SLA</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5K+</div>
+      <div class="stat-label">Daily Sessions Served</div>
+    </div>
+  </div>
+</section>
 
-    let currentSlide = 0;
-    let autoAdvanceTimeout;
-    let countdownInterval;
-    let slide4ConfettiInterval;
-    let blowConfettiTimeout;
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// about me</div>
+  <h2>Crafting Reliable Backend Systems</h2>
+  <div class="section-divider"></div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        I'm a <strong>Senior Software Engineer at Infinite Computer Solutions</strong>, Chennai, with 5 years
+        of hands-on experience building and maintaining mission-critical Java backend systems
+        in the <strong>Healthcare / Medicaid (MMIS)</strong> domain.
+      </p>
+      <p>
+        My work spans the full backend lifecycle — from <strong>architecting Spring Boot microservices</strong> and
+        building <strong>event-driven Kafka pipelines</strong> to optimizing Oracle SQL queries that run
+        at peak enrollment scale. I've led production support for systems serving
+        <strong>5,000+ daily sessions with 99.9% uptime</strong>.
+      </p>
+      <p>
+        I'm deeply focused on <strong>JVM internals, concurrency, and distributed system design</strong> —
+        and I apply SOLID principles, TDD, and design patterns not as buzzwords but as daily tools.
+        I hold an <strong>ICT Cloud Solution Architect certification</strong> and actively explore
+        Spring AI integrations with GPT-4 and Anthropic Claude.
+      </p>
+      <p>
+        Currently open to <strong>Senior Java Backend / Lead Engineer roles</strong> where I can drive
+        architectural decisions and deliver measurable impact.
+      </p>
+      <div style="margin-top: 1.5rem;">
+        <span class="pill-status"><span class="status-dot"></span>Open to opportunities</span>
+      </div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-title">Quick Info</div>
+      <div class="info-row">
+        <div class="info-icon">🏢</div>
+        <div><div class="info-label">Company</div><div class="info-value">Infinite Computer Solutions</div></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📍</div>
+        <div><div class="info-label">Location</div><div class="info-value">Chennai, India</div></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🎓</div>
+        <div><div class="info-label">Education</div><div class="info-value">BCA — Gurunanak College (9.1 CGPA)</div></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🏥</div>
+        <div><div class="info-label">Domain</div><div class="info-value">Healthcare · MMIS · Medicaid</div></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">☕</div>
+        <div><div class="info-label">Primary Stack</div><div class="info-value">Java · Spring Boot · Kafka</div></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📜</div>
+        <div><div class="info-label">Certification</div><div class="info-value">ICT Cloud Solution Architect</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    const state = {
-      countdownUnlocked: false,
-      age: 25,
-      milestoneDays: 0,
-      recipe: {
-        flavor: 'vanilla',
-        baseColor: '#f7e1d9',
-        frostingColor: '#ffe4ee',
-        dripColor: '#ffd8e9',
-        candleCount: 0,
-        candlesLit: false,
-        cakeFinished: false,
-      },
-      dripColor: '#ffd8e9',
-    };
+<!-- SKILLS -->
+<section id="skills" style="background: var(--bg2); max-width: 100%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">// tech stack</div>
+    <h2>Skills &amp; Technologies</h2>
+    <div class="section-divider"></div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">☕</span><span class="skill-cat">Core Java</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag hot">Java 8–21</span>
+          <span class="skill-tag hot">Streams &amp; Lambdas</span>
+          <span class="skill-tag">Concurrency</span>
+          <span class="skill-tag">JVM Internals</span>
+          <span class="skill-tag">Virtual Threads</span>
+          <span class="skill-tag">DSA</span>
+          <span class="skill-tag">OOD / SOLID</span>
+          <span class="skill-tag">Design Patterns</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">🌱</span><span class="skill-cat">Spring Ecosystem</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag hot">Spring Boot</span>
+          <span class="skill-tag hot">Spring MVC</span>
+          <span class="skill-tag">Spring Data JPA</span>
+          <span class="skill-tag">Spring Security</span>
+          <span class="skill-tag">Spring AI</span>
+          <span class="skill-tag">Hibernate</span>
+          <span class="skill-tag">OAuth2 / JWT</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">🏗️</span><span class="skill-cat">Architecture</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag hot">Microservices</span>
+          <span class="skill-tag hot">Event-Driven (Kafka)</span>
+          <span class="skill-tag">RESTful APIs</span>
+          <span class="skill-tag">SOAP / Web Services</span>
+          <span class="skill-tag">HLD / LLD</span>
+          <span class="skill-tag">Distributed Systems</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">☁️</span><span class="skill-cat">Cloud &amp; DevOps</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag hot">AWS (EC2, S3, CloudWatch)</span>
+          <span class="skill-tag hot">Docker</span>
+          <span class="skill-tag">Kubernetes</span>
+          <span class="skill-tag">Jenkins</span>
+          <span class="skill-tag">GitHub Actions</span>
+          <span class="skill-tag">CI/CD</span>
+          <span class="skill-tag">Maven / Gradle</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">🗄️</span><span class="skill-cat">Databases</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag hot">Oracle SQL</span>
+          <span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">MySQL</span>
+          <span class="skill-tag">MongoDB</span>
+          <span class="skill-tag">Redis</span>
+          <span class="skill-tag">Query Tuning</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-header"><span class="skill-icon">📊</span><span class="skill-cat">Observability &amp; Testing</span></div>
+        <div class="skill-tags">
+          <span class="skill-tag">Prometheus</span>
+          <span class="skill-tag">Grafana</span>
+          <span class="skill-tag">ELK Stack</span>
+          <span class="skill-tag">Splunk</span>
+          <span class="skill-tag hot">JUnit / Mockito</span>
+          <span class="skill-tag">TDD / BDD</span>
+          <span class="skill-tag">SonarQube</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    const reasonCards = Array.from(document.querySelectorAll('.flip-card'));
-    const messageHearts = Array.from(document.querySelectorAll('.heart-toggle'));
-    const dripSelectors = Array.from(document.querySelectorAll('[data-color]'));
-    const flavorSelectors = Array.from(document.querySelectorAll('[data-flavor]'));
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">// work history</div>
+  <h2>Experience</h2>
+  <div class="section-divider"></div>
+  <div class="timeline">
 
-    const countdownTarget = getNextMidnight();
-    countdownDateLabel.textContent = countdownTarget.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    <div class="exp-item">
+      <div class="exp-dot active"></div>
+      <div class="exp-header">
+        <div class="exp-role">Senior Software Engineer</div>
+        <div class="exp-meta">Infinite Computer Solutions &nbsp;·&nbsp; <span>Apr 2025 – Present</span> &nbsp;·&nbsp; Chennai</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Architected end-to-end <strong>OpenText xPression integration</strong> via Spring Boot SOAP handler — automated letter generation, reducing caseworker overhead by <strong>40%</strong>.</li>
+        <li>Engineered <strong>DocFinity REST API layer</strong> for metadata search and inline document rendering, supporting <strong>5,000+ daily sessions</strong> with zero production downtime.</li>
+        <li>Reduced response latency by <strong>25%</strong> on high-traffic MMIS portal endpoints through query tuning and Spring Boot service refactoring.</li>
+        <li>Led <strong>L3 production support &amp; incident response</strong>, consistently resolving P1 tickets within 24-hour SLA windows — maintaining 99.9% availability.</li>
+      </ul>
+    </div>
 
-    function getNextMidnight() {
-      const next = new Date();
-      next.setHours(24, 0, 0, 0);
-      return next;
-    }
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-header">
+        <div class="exp-role">Software Engineer</div>
+        <div class="exp-meta">Infinite Computer Solutions &nbsp;·&nbsp; <span>Apr 2023 – Apr 2025</span> &nbsp;·&nbsp; Chennai</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Led enterprise-wide <strong>Java 8 migration</strong> for TSU project — refactored <strong>200+ classes</strong> using Streams and Lambdas, reducing technical debt by 30%.</li>
+        <li>Orchestrated complex <strong>Medicaid business workflows</strong> using IBM BPEL, integrating <strong>12+ service components</strong> into reliable transaction chains.</li>
+        <li>Automated deployment pipelines via <strong>C#/.NET utilities and Shell scripts</strong> — saved engineering team <strong>10+ hours/week</strong>.</li>
+        <li>Standardized API docs with <strong>Swagger/OpenAPI</strong>, reducing cross-team integration friction by 20%.</li>
+      </ul>
+    </div>
 
-    function formatTwo(value) {
-      return String(value).padStart(2, '0');
-    }
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-header">
+        <div class="exp-role">Associate Software Engineer</div>
+        <div class="exp-meta">Infinite Computer Solutions &nbsp;·&nbsp; <span>Oct 2021 – Apr 2023</span> &nbsp;·&nbsp; Bangalore</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Modernized <strong>legacy J2EE modules</strong> (JSP/JSF/EJB), resolving 50+ critical production defects in the MMIS portal.</li>
+        <li>Tuned Oracle SQL for high-volume enrollment — reduced DB CPU utilization by <strong>20%</strong> during peak periods.</li>
+        <li>Authored <strong>15+ LLD technical design docs</strong> that became the foundation for the Spring Boot modernization roadmap.</li>
+      </ul>
+    </div>
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = countdownTarget - now;
-      if (diff <= 0) {
-        countdownUnlocked();
-        return;
-      }
-      const seconds = Math.floor(diff / 1000) % 60;
-      const minutes = Math.floor(diff / (1000 * 60)) % 60;
-      const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      daysValue.textContent = formatTwo(days);
-      hoursValue.textContent = formatTwo(hours);
-      minutesValue.textContent = formatTwo(minutes);
-      secondsValue.textContent = formatTwo(seconds);
-      countdownStatus.textContent = 'Locked until midnight. You are almost there.';
-      nextBtn.disabled = true;
-    }
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-header">
+        <div class="exp-role">Graduate Trainee</div>
+        <div class="exp-meta">Infinite Computer Solutions &nbsp;·&nbsp; <span>Jul 2021 – Oct 2021</span> &nbsp;·&nbsp; Chennai</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Intensive full-stack training in <strong>Core Java, Spring Framework, and Oracle DB</strong> — graduated in the <strong>top 5%</strong> of the cohort.</li>
+      </ul>
+    </div>
 
-    function countdownUnlocked() {
-      clearInterval(countdownInterval);
-      state.countdownUnlocked = true;
-      countdownStatus.textContent = 'Unlocked! Let the surprise begin.';
-      nextBtn.disabled = false;
-      if (currentSlide === 0) {
-        setTimeout(() => goToSlide(1), 1200);
-      }
-    }
+  </div>
+</section>
 
-    function createProgress() {
-      slides.forEach((_, index) => {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'h-2 w-2 rounded-full bg-pink-200 transition duration-300';
-        if (index === currentSlide) dot.classList.add('bg-pink-500', 'w-3');
-        dot.setAttribute('aria-label', `Slide ${index + 1}`);
-        dot.addEventListener('click', () => goToSlide(index));
-        progressDots.appendChild(dot);
-      });
-    }
+<!-- PROJECTS -->
+<section id="projects" style="background: var(--bg2); max-width: 100%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">// featured work</div>
+    <h2>Projects &amp; Contributions</h2>
+    <div class="section-divider"></div>
+    <div class="projects-grid">
 
-    function updateProgress() {
-      progressDots.querySelectorAll('button').forEach((dot, index) => {
-        dot.className = 'h-2 w-2 rounded-full bg-pink-200 transition duration-300';
-        if (index === currentSlide) dot.classList.add('bg-pink-500', 'w-3');
-      });
-    }
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-icon">🏥</span>
+          <span class="project-lang"><span class="lang-dot"></span>Java</span>
+        </div>
+        <div class="project-name">MMIS Medicaid Portal — Spring Boot Modernization</div>
+        <div class="project-desc">Led end-to-end refactor of legacy J2EE MMIS portal to Spring Boot microservices. Improved performance, maintainability, and introduced CI/CD pipelines. Handles eligibility, enrollment, and claims workflows for Medicaid members.</div>
+        <div class="project-tags">
+          <span class="project-tag">Spring Boot</span>
+          <span class="project-tag">Oracle SQL</span>
+          <span class="project-tag">IBM BPEL</span>
+          <span class="project-tag">Microservices</span>
+          <span class="project-tag">Maven</span>
+        </div>
+      </div>
 
-    function showSlide(index) {
-      slides.forEach((slide, idx) => {
-        slide.classList.toggle('active', idx === index);
-        slide.style.opacity = idx === index ? '1' : '0';
-        slide.style.transition = 'opacity 0.45s ease';
-      });
-      prevBtn.disabled = index === 0;
-      if (index === slides.length - 1) {
-        nextBtn.textContent = 'Finish ❤️';
-        nextBtn.disabled = false;
-      } else {
-        nextBtn.textContent = 'Next →';
-        nextBtn.disabled = index === 0 && !state.countdownUnlocked;
-      }
-      if (index === 3) {
-        startSlide4Confetti();
-      } else {
-        stopSlide4Confetti();
-      }
-      if (index === 10 && !state.recipe.cakeFinished) {
-        nextBtn.disabled = true;
-      }
-      updateProgress();
-      resetAutoAdvance();
-    }
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-icon">📄</span>
+          <span class="project-lang"><span class="lang-dot"></span>Java</span>
+        </div>
+        <div class="project-name">OpenText xPression — Automated Letter Generation</div>
+        <div class="project-desc">Architected Spring Boot SOAP integration with OpenText xPression for automated caseworker letter generation. Reduced manual overhead by 40% across Medicaid operations. Zero-downtime deployment with 99.9% SLA.</div>
+        <div class="project-tags">
+          <span class="project-tag">Spring Boot</span>
+          <span class="project-tag">SOAP</span>
+          <span class="project-tag">IBM WebSphere</span>
+          <span class="project-tag">OpenText</span>
+        </div>
+      </div>
 
-    function goToSlide(index) {
-      if (index > 0 && !state.countdownUnlocked && currentSlide === 0) {
-        return;
-      }
-      currentSlide = Math.max(0, Math.min(index, slides.length - 1));
-      showSlide(currentSlide);
-    }
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-icon">🔍</span>
+          <span class="project-lang"><span class="lang-dot" style="background:var(--purple)"></span>Java</span>
+        </div>
+        <div class="project-name">DocFinity REST API — Document Management Layer</div>
+        <div class="project-desc">Built high-performance document metadata search and inline rendering REST API layer using DocFinity integration. Serves 5,000+ daily sessions. Custom Java user-exit utilities resolved complex Medicaid logic gaps, cutting document errors by 15%.</div>
+        <div class="project-tags">
+          <span class="project-tag">REST API</span>
+          <span class="project-tag">Spring Boot</span>
+          <span class="project-tag">DocFinity</span>
+          <span class="project-tag">Java</span>
+        </div>
+      </div>
 
-    function nextSlide() {
-      if (currentSlide === 0 && !state.countdownUnlocked) return;
-      if (currentSlide < slides.length - 1) {
-        goToSlide(currentSlide + 1);
-      }
-    }
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-icon">🤖</span>
+          <span class="project-lang"><span class="lang-dot" style="background:var(--green)"></span>Java</span>
+        </div>
+        <div class="project-name">Spring AI — GenAI Integration (Learning Project)</div>
+        <div class="project-desc">Exploring Spring AI integrations with OpenAI GPT-4/4o and Anthropic Claude for intelligent document classification and query automation in healthcare data workflows. Prompt engineering for structured JSON extraction from clinical text.</div>
+        <div class="project-tags">
+          <span class="project-tag">Spring AI</span>
+          <span class="project-tag">GPT-4</span>
+          <span class="project-tag">Anthropic Claude</span>
+          <span class="project-tag">Prompt Engineering</span>
+        </div>
+      </div>
 
-    function prevSlide() {
-      if (currentSlide > 0) {
-        goToSlide(currentSlide - 1);
-      }
-    }
+    </div>
 
-    function resetAutoAdvance() {
-      clearTimeout(autoAdvanceTimeout);
-      autoAdvanceTimeout = setTimeout(() => {
-        if (currentSlide < slides.length - 1 && (currentSlide !== 0 || state.countdownUnlocked)) nextSlide();
-      }, 9000);
-    }
+    <!-- Contribution Graph -->
+    <div class="contrib-section">
+      <div class="contrib-label">Simulated activity heatmap — Replace with GitHub Readme Stats widget</div>
+      <div class="contrib-graph" id="contribGraph"></div>
+    </div>
+  </div>
+</section>
 
-    function startSlide4Confetti() {
-      if (!slide4Confetti) return;
-      slide4Confetti.innerHTML = '';
-      for (let i = 0; i < 18; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'confetti-dot';
-        dot.style.background = ['#ff8fca', '#ffd8e8', '#ffb0ca', '#f6c4ff'][i % 4];
-        dot.style.left = `${Math.random() * 90}%`;
-        dot.style.top = `${Math.random() * 20 + 4}%`;
-        dot.style.animationDelay = `${Math.random() * 1.2}s`;
-        slide4Confetti.appendChild(dot);
-      }
-    }
+<!-- GITHUB README -->
+<section id="readme">
+  <div class="section-label">// github profile</div>
+  <h2>Profile README.md</h2>
+  <div class="section-divider"></div>
+  <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 14px;">Copy this into your <code style="font-family: var(--mono); font-size: 12px; background: var(--bg2); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border);">Rajes07/Rajes07</code> repository's README.md to transform your GitHub profile.</p>
+  <div class="readme-box">
+    <div class="readme-topbar">
+      📄 README.md &nbsp;·&nbsp; Rajes07/Rajes07
+    </div>
+    <div class="readme-body">
+      <pre id="readmeContent">
+<span class="md-h1"># Hi, I'm Rajesh Kumar Mohan 👋</span>
 
-    function stopSlide4Confetti() {
-      if (!slide4Confetti) return;
-      slide4Confetti.innerHTML = '';
-    }
+<span class="md-badge">![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=58A6FF&width=500&lines=Senior+Java+Backend+Engineer;Spring+Boot+%7C+Kafka+%7C+Microservices;Healthcare+%2F+MMIS+Domain+Expert;5%2B+Years+of+Production+Experience)</span>
 
-    function renderCake() {
-      const baseIds = ['cakeBase', 'cakeBase8', 'cakeBase9', 'cakeBase10', 'cakeBase11'];
-      const frostingIds = ['cakeFrosting', 'cakeFrosting8', 'cakeFrosting9', 'cakeFrosting10', 'cakeFrosting11'];
-      const dripIds = ['cakeDrip', 'cakeDrip8', 'cakeDrip9', 'cakeDrip10', 'cakeDrip11'];
-      const candleGroups = ['candleGroup', 'candleGroup8', 'candleGroup9', 'candleGroup10', 'candleGroup11'];
-      baseIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.background = state.recipe.baseColor;
-      });
-      frostingIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.background = state.recipe.frostingColor;
-      });
-      dripIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.background = state.recipe.dripColor;
-      });
-      candleGroups.forEach(id => {
-        const group = document.getElementById(id);
-        if (!group) return;
-        group.innerHTML = '';
-        for (let i = 0; i < state.recipe.candleCount; i++) {
-          const candle = document.createElement('div');
-          candle.className = 'candle';
-          if (state.recipe.cakeFinished) {
-            const smoke = document.createElement('div');
-            smoke.className = 'smoke';
-            candle.appendChild(smoke);
-          } else if (state.recipe.candlesLit) {
-            const flame = document.createElement('div');
-            flame.className = 'flame';
-            candle.appendChild(flame);
-          }
-          group.appendChild(candle);
-        }
-      });
-      candlesCount.textContent = state.recipe.candleCount;
-    }
+<span class="md-bold">**Senior Software Engineer** at Infinite Computer Solutions, Chennai</span>
+Building reliable, high-performance Java backend systems in the Healthcare/Medicaid domain.
 
-    function updateMilestoneNumbers() {
-      ageValue.textContent = state.age;
-      const days = Math.round(state.age * 365.25);
-      daysCount.textContent = days.toLocaleString();
-    }
+---
 
-    function updateReasonCount() {
-      const revealed = reasonCards.filter(card => card.classList.contains('flipped')).length;
-      const badge = document.querySelector('#slideContainer .slide[data-slide="6"] .inline-flex');
-      if (badge) badge.textContent = `${revealed} / 12 Reasons Revealed 💖`;
-    }
+<span class="md-h2">## 🚀 About Me</span>
 
-    function toggleMessageHearts() {
-      messageHearts.forEach(node => {
-        node.addEventListener('click', () => {
-          node.classList.toggle('active');
-        });
-      });
-    }
+- 🏥 5+ years building **MMIS (Medicaid Management Information System)** platforms
+- ⚡ Architected systems serving **5,000+ daily sessions** with **99.9% uptime**
+- 🔧 Led Java 8 migration refactoring **200+ classes** — reduced tech debt by 30%
+- 📄 Integrated OpenText xPression, reducing caseworker overhead by **40%**
+- 🤖 Exploring **Spring AI** with GPT-4 and Anthropic Claude
+- 📜 ICT **Cloud Solution Architect** certified
 
-    function setupFlipCards() {
-      reasonCards.forEach(card => {
-        card.addEventListener('click', () => {
-          card.classList.toggle('flipped');
-          updateReasonCount();
-        });
-      });
-    }
+---
 
-    function setupFlavorSelectors() {
-      flavorSelectors.forEach(button => {
-        button.addEventListener('click', () => {
-          flavorSelectors.forEach(btn => btn.classList.remove('ring-2', 'ring-pink-400'));
-          button.classList.add('ring-2', 'ring-pink-400');
-          const flavor = button.dataset.flavor;
-          state.recipe.flavor = flavor;
-          if (flavor === 'vanilla') state.recipe.baseColor = '#f7e1d9';
-          if (flavor === 'chocolate') state.recipe.baseColor = '#8c5b4d';
-          if (flavor === 'strawberry') state.recipe.baseColor = '#ffccd8';
-          if (flavor === 'redvelvet') state.recipe.baseColor = '#d05570';
-          renderCake();
-        });
-      });
-    }
+<span class="md-h2">## 🛠️ Tech Stack</span>
 
-    function setupDripSelectors() {
-      dripSelectors.forEach(button => {
-        button.addEventListener('click', () => {
-          dripSelectors.forEach(btn => btn.classList.remove('ring-2', 'ring-pink-400'));
-          button.classList.add('ring-2', 'ring-pink-400');
-          state.recipe.dripColor = button.dataset.color;
-          renderCake();
-        });
-      });
-    }
+<span class="md-badge">![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)</span>
+<span class="md-badge">![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)</span>
+<span class="md-badge">![Apache Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)</span>
+<span class="md-badge">![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)</span>
+<span class="md-badge">![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)</span>
+<span class="md-badge">![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)</span>
+<span class="md-badge">![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)</span>
+<span class="md-badge">![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)</span>
 
-    function revealNextReason() {
-      const nextCard = reasonCards.find(card => !card.classList.contains('flipped'));
-      if (nextCard) {
-        nextCard.classList.add('flipped');
-        updateReasonCount();
-      }
-    }
+---
 
-    function revealAllReasons() {
-      reasonCards.forEach(card => card.classList.add('flipped'));
-      updateReasonCount();
-    }
+<span class="md-h2">## 📊 GitHub Stats</span>
 
-    function addCandle() {
-      if (state.recipe.candleCount >= 5) return;
-      state.recipe.candleCount += 1;
-      state.recipe.cakeFinished = false;
-      state.recipe.candlesLit = false;
-      renderCake();
-      if (currentSlide === 8) {
-        nextBtn.disabled = false;
-      }
-    }
+![Rajesh's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Rajes07&show_icons=true&theme=github_dark&hide_border=true)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Rajes07&layout=compact&theme=github_dark&hide_border=true)
 
-    function removeAllCandles() {
-      state.recipe.candleCount = 0;
-      state.recipe.candlesLit = false;
-      state.recipe.cakeFinished = false;
-      renderCake();
-    }
+---
 
-    function lightCandles() {
-      if (state.recipe.candleCount === 0) {
-        state.recipe.candleCount = 1;
-      }
-      state.recipe.candlesLit = true;
-      state.recipe.cakeFinished = false;
-      renderCake();
-      alert('127.0.0.1 says: Close your eyes Cutie and 💫 Make a wish! ✨');
-    }
+<span class="md-h2">## 🏆 Highlights</span>
 
-    function blowOutCandles() {
-      state.recipe.candlesLit = false;
-      state.recipe.cakeFinished = true;
-      renderCake();
-      finalStatus.style.opacity = '1';
-      renderBlowConfetti();
-      if (currentSlide === 10) {
-        nextBtn.disabled = false;
-      }
-    }
+| Metric | Impact |
+|--------|--------|
+| 🎯 Latency Reduction | 25% on high-traffic MMIS endpoints |
+| 📄 Letter Automation | 40% reduction in manual overhead |
+| 🔄 Classes Refactored | 200+ during Java 8 migration |
+| ⏱️ Time Saved | 10+ hrs/week via automation scripts |
+| 🔒 Uptime | 99.9% SLA maintained |
 
-    function renderBlowConfetti() {
-      if (!blowConfetti) return;
-      blowConfetti.innerHTML = '';
-      for (let i = 0; i < 22; i++) {
-        const piece = document.createElement('span');
-        piece.className = 'confetti-piece';
-        piece.style.background = ['#ffbbd5', '#ffe7b5', '#d8c7ff', '#ffb2d0'][i % 4];
-        piece.style.left = `${Math.random() * 90}%`;
-        piece.style.top = `${Math.random() * 40 + 10}%`;
-        piece.style.animationDuration = `${1.8 + Math.random() * 1.4}s`;
-        piece.style.animationDelay = `${Math.random() * 0.6}s`;
-        piece.style.width = `${6 + Math.random() * 10}px`;
-        piece.style.height = `${6 + Math.random() * 10}px`;
-        blowConfetti.appendChild(piece);
-      }
-      clearTimeout(blowConfettiTimeout);
-      blowConfettiTimeout = setTimeout(() => {
-        if (blowConfetti) blowConfetti.innerHTML = '';
-      }, 4500);
-    }
+---
 
-    nextBtn.addEventListener('click', nextSlide);
-    prevBtn.addEventListener('click', prevSlide);
-    startSurpriseBtn?.addEventListener('click', nextSlide);
-    revealNextBtn?.addEventListener('click', revealNextReason);
-    revealAllBtn?.addEventListener('click', revealAllReasons);
-    addDripBtn?.addEventListener('click', () => {
-      renderCake();
-    });
-    addCandleBtn?.addEventListener('click', addCandle);
-    removeCandlesBtn?.addEventListener('click', removeAllCandles);
-    lightCandlesBtn?.addEventListener('click', lightCandles);
-    blowOutBtn?.addEventListener('click', blowOutCandles);
+<span class="md-h2">## 📫 Connect</span>
 
-    document.body.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight') nextSlide();
-      if (event.key === 'ArrowLeft') prevSlide();
-    });
+<span class="md-link">[![Email](https://img.shields.io/badge/hrajes57@gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:hrajes57@gmail.com)</span>
+<span class="md-link">[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_LINKEDIN)</span>
+<span class="md-link">[![LeetCode](https://img.shields.io/badge/LeetCode-FFA116?style=flat&logo=leetcode&logoColor=black)](https://leetcode.com/YOUR_HANDLE)</span>
 
-    function init() {
-      createProgress();
-      updateMilestoneNumbers();
-      setupFlipCards();
-      toggleMessageHearts();
-      setupFlavorSelectors();
-      setupDripSelectors();
-      renderCake();
-      showSlide(currentSlide);
-      updateReasonCount();
-      countdownInterval = setInterval(updateCountdown, 1000);
-      updateCountdown();
-    }
+---
+<span style="color: #484f58">⭐ Open to Senior Java Backend / Lead Engineer roles · Chennai or Remote</span>
+      </pre>
+      <button class="copy-btn" onclick="copyReadme()">📋 Copy README to clipboard</button>
+    </div>
+  </div>
+</section>
 
-    init();
-  </script>
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">// get in touch</div>
+  <h2>Contact</h2>
+  <div class="section-divider"></div>
+  <p style="color: var(--muted); margin-bottom: 2rem;">Open to Senior Java Backend and Lead Engineer roles. Let's build something production-grade.</p>
+  <div class="contact-grid">
+    <a href="mailto:hrajes57@gmail.com" class="contact-card">
+      <div class="contact-icon">📬</div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value">hrajes57@gmail.com</div>
+    </a>
+    <a href="https://github.com/Rajes07" target="_blank" class="contact-card">
+      <div class="contact-icon">🐙</div>
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value">github.com/Rajes07</div>
+    </a>
+    <a href="tel:+917358470999" class="contact-card">
+      <div class="contact-icon">📱</div>
+      <div class="contact-label">Phone</div>
+      <div class="contact-value">+91 7358470999</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span style="color: var(--accent)">Rajesh Kumar Mohan</span> &nbsp;·&nbsp; Senior Software Engineer &nbsp;·&nbsp; Chennai, India &nbsp;·&nbsp; Built with ❤️ &amp; Java
+</footer>
+
+<script>
+// Generate contribution graph
+const graph = document.getElementById('contribGraph');
+const levels = [0,0,0,1,1,2,2,3,4,3,2,1,2,3,4,4,3,2,1,0,1,2,3,4,3,2,3,4,4,3,2,1,0,0,1,2,3,4,3,2,1,2,3,4,3,2,1,0,1,2,2];
+for(let w=0; w<52; w++) {
+  const col = document.createElement('div');
+  col.className = 'contrib-col';
+  for(let d=0; d<7; d++) {
+    const cell = document.createElement('div');
+    const lvl = levels[Math.floor(Math.random()*levels.length)];
+    cell.className = 'contrib-cell c' + lvl;
+    col.appendChild(cell);
+  }
+  graph.appendChild(col);
+}
+
+// Copy README
+function copyReadme() {
+  const el = document.getElementById('readmeContent');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.innerHTML = '📋 Copy README to clipboard', 2000);
+  });
+}
+</script>
 </body>
 </html>
